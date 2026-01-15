@@ -10,33 +10,33 @@ const inter = Inter({
 
 export const metadata: Metadata = {
     title: {
-        default: 'Geum Imobiliária | Imóveis de Alto Padrão',
-        template: '%s | Geum Imobiliária',
+        default: 'G-CRM | CRM Imobiliário #1 do Brasil',
+        template: '%s | G-CRM',
     },
-    description: 'Encontre o imóvel dos seus sonhos com a Geum Imobiliária. Apartamentos, casas e imóveis comerciais de alto padrão.',
-    keywords: ['imobiliária', 'imóveis', 'apartamentos', 'casas', 'aluguel', 'venda', 'alto padrão'],
-    authors: [{ name: 'Geum Imobiliária' }],
-    creator: 'Geum Imobiliária',
+    description: 'O CRM imobiliário mais completo do Brasil. Gerencie leads, automatize processos e aumente suas vendas. Teste grátis por 14 dias.',
+    keywords: ['CRM imobiliário', 'CRM para imobiliárias', 'gestão de leads', 'software imobiliário', 'pipeline de vendas'],
+    authors: [{ name: 'G-CRM' }],
+    creator: 'G-CRM',
     openGraph: {
         type: 'website',
         locale: 'pt_BR',
-        url: 'https://geum.com.br',
-        siteName: 'Geum Imobiliária',
-        title: 'Geum Imobiliária | Imóveis de Alto Padrão',
-        description: 'Encontre o imóvel dos seus sonhos com a Geum Imobiliária.',
+        url: 'https://gcrm.com.br',
+        siteName: 'G-CRM',
+        title: 'G-CRM | CRM Imobiliário #1 do Brasil',
+        description: 'O CRM imobiliário mais completo do Brasil. Gerencie leads e aumente suas vendas.',
         images: [
             {
                 url: '/og-image.jpg',
                 width: 1200,
                 height: 630,
-                alt: 'Geum Imobiliária',
+                alt: 'G-CRM - CRM Imobiliário',
             },
         ],
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Geum Imobiliária | Imóveis de Alto Padrão',
-        description: 'Encontre o imóvel dos seus sonhos com a Geum Imobiliária.',
+        title: 'G-CRM | CRM Imobiliário #1 do Brasil',
+        description: 'O CRM imobiliário mais completo do Brasil. Gerencie leads e aumente suas vendas.',
         images: ['/og-image.jpg'],
     },
     robots: {
