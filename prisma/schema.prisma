@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
 }
 
 // ==========================================
@@ -93,14 +94,12 @@ model User {
   phone         String?
   avatar        String?
   role          UserRole  @default(BROKER)
-  creci         String?   // Registro CRECI do corretor
+  creci         String?
   isActive      Boolean   @default(true)
   
-  // Auth
   emailVerified DateTime?
   password      String?
   
-  // Relations
   properties    Property[]    @relation("PropertyBroker")
   leads         Lead[]        @relation("LeadBroker")
   interactions  Interaction[]
@@ -117,66 +116,53 @@ model User {
 // ==========================================
 
 model Property {
-  id            String          @id @default(cuid())
-  
-  // Identificação
-  code          String          @unique // Código interno (ex: "GE001")
-  title         String
-  description   String?         @db.Text
-  
-  // Tipo e Status
-  type          PropertyType
-  status        PropertyStatus  @default(AVAILABLE)
+  id              String          @id @default(cuid())
+  code            String          @unique
+  title           String
+  description     String?         @db.Text
+  type            PropertyType
+  status          PropertyStatus  @default(AVAILABLE)
   transactionType TransactionType
   
-  // Valores
-  salePrice     Decimal?        @db.Decimal(12, 2)
-  rentPrice     Decimal?        @db.Decimal(10, 2)
-  condoFee      Decimal?        @db.Decimal(8, 2)  // Condomínio
-  iptu          Decimal?        @db.Decimal(8, 2)  // IPTU anual
+  salePrice       Decimal?        @db.Decimal(12, 2)
+  rentPrice       Decimal?        @db.Decimal(10, 2)
+  condoFee        Decimal?        @db.Decimal(8, 2)
+  iptu            Decimal?        @db.Decimal(8, 2)
   
-  // Características
-  area          Float           // Área em m²
-  builtArea     Float?          // Área construída em m²
-  bedrooms      Int?
-  bathrooms     Int?
-  suites        Int?
-  parkingSpaces Int?
+  area            Float
+  builtArea       Float?
+  bedrooms        Int?
+  bathrooms       Int?
+  suites          Int?
+  parkingSpaces   Int?
   
-  // Localização
-  address       String
-  number        String?
-  complement    String?
-  neighborhood  String
-  city          String
-  state         String          @db.VarChar(2)
-  zipCode       String          @db.VarChar(9)
-  latitude      Float?
-  longitude     Float?
+  address         String
+  number          String?
+  complement      String?
+  neighborhood    String
+  city            String
+  state           String          @db.VarChar(2)
+  zipCode         String          @db.VarChar(9)
+  latitude        Float?
+  longitude       Float?
   
-  // Mídia
-  images        PropertyImage[]
-  featuredImage String?         // URL da imagem principal
-  videoUrl      String?
-  virtualTour   String?         // URL do tour virtual
+  images          PropertyImage[]
+  featuredImage   String?
+  videoUrl        String?
+  virtualTour     String?
+  features        String[]
   
-  // Características adicionais
-  features      String[]        // Array de características (piscina, churrasqueira, etc)
-  
-  // SEO
-  slug          String          @unique
-  metaTitle     String?
+  slug            String          @unique
+  metaTitle       String?
   metaDescription String?
   
-  // Relacionamentos
-  brokerId      String
-  broker        User            @relation("PropertyBroker", fields: [brokerId], references: [id])
-  contracts     Contract[]
+  brokerId        String
+  broker          User            @relation("PropertyBroker", fields: [brokerId], references: [id])
+  contracts       Contract[]
   
-  // Timestamps
-  publishedAt   DateTime?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  publishedAt     DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
   
   @@index([status, transactionType])
   @@index([city, neighborhood])
@@ -191,10 +177,8 @@ model PropertyImage {
   url         String
   alt         String?
   order       Int      @default(0)
-  
   propertyId  String
   property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  
   createdAt   DateTime @default(now())
   
   @@map("property_images")
@@ -206,29 +190,17 @@ model PropertyImage {
 
 model Lead {
   id            String      @id @default(cuid())
-  
-  // Dados básicos
   name          String
   email         String
   phone         String
-  
-  // Status no Pipeline
   status        LeadStatus  @default(NEW)
   source        LeadSource  @default(WEBSITE)
-  
-  // Preferências (para Matching Engine)
-  preferences   Json?       // { minBedrooms, maxPrice, neighborhoods[], propertyTypes[] }
-  
-  // Relacionamentos
+  preferences   Json?
   brokerId      String?
   broker        User?       @relation("LeadBroker", fields: [brokerId], references: [id])
   interactions  Interaction[]
   contracts     Contract[]
-  
-  // Métricas
-  score         Int         @default(0) // Lead scoring
-  
-  // Timestamps
+  score         Int         @default(0)
   lastContactAt DateTime?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
@@ -245,22 +217,15 @@ model Lead {
 
 model Interaction {
   id          String          @id @default(cuid())
-  
   type        InteractionType
   title       String
   description String?         @db.Text
-  
-  // Agendamento (para visitas/reuniões)
   scheduledAt DateTime?
   completedAt DateTime?
-  
-  // Relacionamentos
   leadId      String
   lead        Lead            @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  
   userId      String
   user        User            @relation(fields: [userId], references: [id])
-  
   createdAt   DateTime        @default(now())
   
   @@index([leadId])
@@ -274,35 +239,21 @@ model Interaction {
 
 model Contract {
   id            String         @id @default(cuid())
-  
   type          ContractType
   status        ContractStatus @default(DRAFT)
-  
-  // Valores
   value         Decimal        @db.Decimal(12, 2)
   commission    Decimal?       @db.Decimal(10, 2)
-  
-  // Datas
   startDate     DateTime
-  endDate       DateTime?      // NULL para vendas
+  endDate       DateTime?
   signedAt      DateTime?
-  
-  // Documentos
   documentUrl   String?
-  
-  // Relacionamentos
   propertyId    String
   property      Property       @relation(fields: [propertyId], references: [id])
-  
   leadId        String
   lead          Lead           @relation(fields: [leadId], references: [id])
-  
   brokerId      String
   broker        User           @relation("ContractBroker", fields: [brokerId], references: [id])
-  
-  // Observações
   notes         String?        @db.Text
-  
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   
