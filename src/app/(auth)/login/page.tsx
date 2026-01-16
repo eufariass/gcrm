@@ -149,16 +149,13 @@ function LoginForm() {
                 </div>
             </div>
 
-            <Button
-                variant="outline"
-                type="button"
-                disabled={isGoogleLoading}
-                className="w-full h-11"
-                onClick={handleGoogleSignIn}
-            >
-                {isGoogleLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
+            <div className="relative">
+                <Button
+                    variant="outline"
+                    type="button"
+                    disabled
+                    className="w-full h-11 opacity-60 cursor-not-allowed"
+                >
                     <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                         <path
                             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -177,9 +174,12 @@ function LoginForm() {
                             fill="#EA4335"
                         />
                     </svg>
-                )}
-                Google
-            </Button>
+                    Google
+                </Button>
+                <span className="absolute -top-2 -right-2 bg-violet-100 text-violet-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                    Em breve
+                </span>
+            </div>
 
             <p className="text-center text-sm text-gray-600">
                 Não tem uma conta?{' '}
