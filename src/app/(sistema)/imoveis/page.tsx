@@ -14,6 +14,10 @@ import { Badge } from '@/components/ui/badge'
 import { Search, Plus, MoreHorizontal, MapPin, Bed, Bath, Square } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
+// Force dynamic rendering - prevents database calls at build time
+export const dynamic = 'force-dynamic'
+
+
 function formatCurrency(value: number) {
     return new Intl.NumberFormat('pt-BR', {
         style: 'currency',
@@ -35,7 +39,7 @@ export default async function ImoveisPage() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Imóveis</h1>
-                    <p className="text-gray-500 mt-2">Gerencie seu portfólio de imóveis</p>
+                    <p className="text-gray-500 mt-2"> </p>
                 </div>
                 <Link href="/imoveis/novo">
                     <Button className="bg-violet-600 hover:bg-violet-700">
